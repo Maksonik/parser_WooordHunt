@@ -5,8 +5,12 @@ from parsers import parser_word
 from validators import get_validated_url
 
 
-def get_word(url_word):
-    """Получить подробное описание слова"""
+def get_word(url_word: str) -> dict[str: str]:
+    """
+    Get a detailed description of the word
+    :param url_word: Url of word or word. Example (www.wooordhunt.ru/word/get or get)
+    :return: Dictionary of word meanings
+    """
     correct_url = get_validated_url(url_word)
     page_word = get_page(correct_url)
     if page_word:
@@ -14,14 +18,18 @@ def get_word(url_word):
         return word
 
 
-async def get_page(url_page):
-    """Получить страницу слова, если данные не вставлять, то вернёт главную страницу с подразделениями слов"""
+async def get_page(url: str) -> str:
+    """
+    Get word page
+    :param url: url of word
+    :return: Page text
+    """
     try:
         async with httpx.AsyncClient() as client:
-            response = await client.get(url_page)
+            response = await client.get(url)
         return response.text
     except Exception as e:
-        print("Ошибка, не смог найти странциу", e)
+        print("Error, couldn't find the page", e)
 
 
 # async def main():
