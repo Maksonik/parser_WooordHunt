@@ -1,40 +1,57 @@
 from bs4 import BeautifulSoup
+from typing import Optional
 
 from constants import PART_OF_SPEECH, WOOORDHUNT_URL
 
 
-def parser_word(page):
+def parser_word(page: str) -> dict[str:str]:
+    """
+    Get a detailed description of the word from page
+    :param page: page text
+    :return: Dictionary of word meanings
+    """
     word = {}
     soup = BeautifulSoup(page, "lxml")
-    word["name"] = _set_word_name(soup)
-    word["short_description"] = _set_word_short_description(soup)
-    word["rank"] = _set_word_rank(soup)
-    word["descriptions"] = _set_word_descriptions(soup)
-    word["sounds"] = _set_word_sounds(soup)
-    word["phrases"] = _set_word_phrases(soup)
-    word["forms"] = _set_word_forms(soup)
+    word["name"] = _get_word_name(soup)
+    word["short_description"] = _get_word_short_description(soup)
+    word["rank"] = _get_word_rank(soup)
+    word["descriptions"] = _get_word_descriptions(soup)
+    word["sounds"] = _get_word_sounds(soup)
+    word["phrases"] = _get_word_phrases(soup)
+    word["forms"] = _get_word_forms(soup)
     return word
 
 
-def _set_word_name(soup):
-    """Устанавить название слова"""
+def _get_word_name(soup: BeautifulSoup) -> str:
+    """
+    Get word name
+    :param soup: class BeautifulSoup of page
+    :return: name of the word
+    """
     word_name = soup.find("h2")
     if not word_name:
         word_name = soup.find("h1")
 
     word_name = word_name.text.strip().lower()
-
     return word_name
 
 
-def _set_word_short_description(soup):
-    """Установить короткое описание слова"""
+def _get_word_short_description(soup: BeautifulSoup) -> Optional[str]:
+    """
+    Get a short description of the word
+    :param soup: class BeautifulSoup of page
+    :return: short description of the word
+    """
     word_short_description = soup.find("div", "t_inline_en")
     return word_short_description.text.strip() if word_short_description else None
 
 
-def _set_word_descriptions(soup):
-    """Установить все значения слова"""
+def _get_word_descriptions(soup: BeautifulSoup) -> list[dict]:
+    """
+    Get all the descriptions of the word
+    :param soup: class BeautifulSoup of page
+    :return: List of all meanings of the word
+    """
 
     def _span_has_not_class(tag):
         return (
@@ -85,8 +102,12 @@ def _set_word_descriptions(soup):
     return descriptions
 
 
-def _set_word_rank(soup):
-    """Установить ранк слова"""
+def _get_word_rank(soup: BeautifulSoup) -> str:
+    """
+    Get a rank of word
+    :param soup: class BeautifulSoup of page
+    :return: rank of word
+    """
     try:
         rank = soup.find(id="word_rank_box").text.strip(" ")
     except Exception:
@@ -94,8 +115,12 @@ def _set_word_rank(soup):
     return rank
 
 
-def _set_word_sounds(soup):
-    """Установить звуки слова"""
+def _get_word_sounds(soup: BeautifulSoup) -> list[dict]:
+    """
+    Get the pronunciation sounds of the word
+    :param soup: class BeautifulSoup of page
+    :return: list of all the pronunciation sounds of the word
+    """
 
     sounds = []
 
@@ -140,8 +165,12 @@ def _set_word_sounds(soup):
     return sounds
 
 
-def _set_word_phrases(soup):
-    """Установить все фразы со словом"""
+def _get_word_phrases(soup: BeautifulSoup) -> list[dict[str:str]]:
+    """
+    Get all phrases with the word
+    :param soup: class BeautifulSoup of page
+    :return: List of all phrases with the word
+    """
 
     phrases = []
     all_phrases = soup.find("div", "block phrases")
@@ -156,8 +185,12 @@ def _set_word_phrases(soup):
     return phrases
 
 
-def _set_word_forms(soup):
-    """Установить все формы слова"""
+def _get_word_forms(soup: BeautifulSoup) -> list[dict[str:str]]:
+    """
+    Get all forms of the word
+    :param soup: class BeautifulSoup of page
+    :return: List of all forms of the word
+    """
 
     forms = []
     word_form_block = soup.find_all("div", "word_form_block")
