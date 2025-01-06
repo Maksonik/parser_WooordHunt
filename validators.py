@@ -1,7 +1,7 @@
 from constants import WOOORDHUNT_WORD_URL
 
 
-def _get_validated_url(word: str) -> str:
+def get_validated_url(word: str) -> str:
     """
     Get the correct url to a word in wooordhunt.ru
     :param word: Url of word or word. Example (www.wooordhunt.ru/word/get or get)
