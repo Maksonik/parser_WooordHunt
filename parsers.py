@@ -30,13 +30,7 @@ def _set_word_name(soup):
 def _set_word_short_description(soup):
     """Установить короткое описание слова"""
     word_short_description = soup.find("div", "t_inline_en")
-
-    if word_short_description:
-        word_short_description = word_short_description.text.strip()
-    else:
-        word_short_description = None
-
-    return word_short_description
+    return word_short_description.text.strip() if word_short_description else None
 
 
 def _set_word_descriptions(soup):
@@ -96,7 +90,6 @@ def _set_word_rank(soup):
     try:
         rank = soup.find(id="word_rank_box").text.strip(" ")
     except Exception as e:
-        print("Нет ранга", e)
         rank = None
     return rank
 
