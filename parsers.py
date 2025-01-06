@@ -89,7 +89,7 @@ def _set_word_rank(soup):
     """Установить ранк слова"""
     try:
         rank = soup.find(id="word_rank_box").text.strip(" ")
-    except Exception as e:
+    except Exception:
         rank = None
     return rank
 

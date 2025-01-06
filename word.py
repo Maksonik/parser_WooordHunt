@@ -5,7 +5,7 @@ from parsers import parser_word
 from validators import get_validated_url
 
 
-def get_word(url_word: str) -> dict[str: str]:
+def get_word(url_word: str) -> dict[str:str]:
     """
     Get a detailed description of the word
     :param url_word: Url of word or word. Example (www.wooordhunt.ru/word/get or get)
