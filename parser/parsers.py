@@ -10,16 +10,16 @@ def parser_word(page: str) -> dict[str:str]:
     :param page: page text
     :return: Dictionary of word meanings
     """
-    word = {}
     soup = BeautifulSoup(page, "lxml")
-    word["name"] = _get_word_name(soup)
-    word["short_description"] = _get_word_short_description(soup)
-    word["rank"] = _get_word_rank(soup)
-    word["descriptions"] = _get_word_descriptions(soup)
-    word["sounds"] = _get_word_sounds(soup)
-    word["phrases"] = _get_word_phrases(soup)
-    word["forms"] = _get_word_forms(soup)
-    return word
+    return {
+        "name": _get_word_name(soup),
+        "short_description": _get_word_short_description(soup),
+        "rank": _get_word_rank(soup),
+        "descriptions": _get_word_descriptions(soup),
+        "sounds": _get_word_sounds(soup),
+        "phrases": _get_word_phrases(soup),
+        "forms": _get_word_forms(soup),
+    }
 
 
 def _get_word_name(soup: BeautifulSoup) -> str:
@@ -28,12 +28,10 @@ def _get_word_name(soup: BeautifulSoup) -> str:
     :param soup: class BeautifulSoup of page
     :return: name of the word
     """
-    word_name = soup.find("h2")
-    if not word_name:
+    if not (word_name := soup.find("h2")):
         word_name = soup.find("h1")
 
-    word_name = word_name.text.strip().lower()
-    return word_name
+    return word_name.text.strip().lower()
 
 
 def _get_word_short_description(soup: BeautifulSoup) -> Optional[str]:
@@ -60,59 +58,71 @@ def _get_word_descriptions(soup: BeautifulSoup) -> list[dict]:
             and not tag.text.startswith("+")
         )
 
-    descriptions = []
+    def _get_description_info(
+        part_of_speech: str,
+        general_meaning: str,
+        deep_meaning: str = None,
+        translate: str = None,
+    ) -> dict[str:str]:
+        return {
+            "part_of_speech": part_of_speech,
+            "general_meaning": general_meaning,
+            "deep_meaning": deep_meaning,
+            "translate": translate,
+        }
 
-    parts_of_speech = soup.find_all("h4")
-    for part_of_speech in parts_of_speech:
+    def _get_all_general_meaning(text: str) -> list:
+        general_descriptions = []
+        for general_meaning in text.strip("\u2002 ").split("\u2002"):
+            if not general_meaning.strip(" "):
+                continue
+            general_descriptions.append(
+                _get_description_info(
+                    part_of_speech=PART_OF_SPEECH[part_of_speech.text.strip(" ↓")],
+                    general_meaning=general_meaning.strip(" "),
+                )
+            )
+        return general_descriptions
+
+    def _get_all_deep_meaning(text: str) -> list:
+        deep_descriptions = []
+        for general_meaning in text.find_next("div").find_all(_span_has_not_class):
+            for br in general_meaning.find_next("div").find_all("br"):
+                deep_descriptions.append(
+                    _get_description_info(
+                        part_of_speech=PART_OF_SPEECH[text.text.strip(" ↓")],
+                        general_meaning=general_meaning.text.strip(),
+                        deep_meaning=br.find_previous_sibling(
+                            "i"
+                        ).previous_element.text.strip("\u2002—"),
+                        translate=br.find_previous_sibling("i").text.strip(),
+                    )
+                )
+        return deep_descriptions
+
+    descriptions = []
+    for part_of_speech in soup.find_all("h4"):
         text = "".join(
             str(child)
             for child in part_of_speech.find_next("div").contents
             if isinstance(child, str)
-        )
-        text = text.replace("-", " ")
-        general_meanings_with_out_deep = text.strip("\u2002 ").split("\u2002")
-        for general_meaning in general_meanings_with_out_deep:
-            if general_meaning.strip(" ") == "":
-                continue
-            descriptions.append(
-                {
-                    "part_of_speech": PART_OF_SPEECH[part_of_speech.text.strip(" ↓")],
-                    "general_meaning": general_meaning.strip(" "),
-                    "deep_meaning": None,
-                    "translate": None,
-                }
-            )
+        ).replace("-", " ")
 
-        general_meanings = part_of_speech.find_next("div").find_all(_span_has_not_class)
-        for general_meaning in general_meanings:
-            brs = general_meaning.find_next("div").find_all("br")
-            for br in brs:
-                translate = br.find_previous_sibling("i")
-                deep_meaning = translate.previous_element
-                descriptions.append(
-                    {
-                        "part_of_speech": PART_OF_SPEECH[
-                            part_of_speech.text.strip(" ↓")
-                        ],
-                        "general_meaning": general_meaning.text.strip(),
-                        "deep_meaning": deep_meaning.text.strip("\u2002—"),
-                        "translate": translate.text.strip(),
-                    }
-                )
+        descriptions.extend(_get_all_general_meaning(text))
+        descriptions.extend(_get_all_deep_meaning(part_of_speech))
     return descriptions
 
 
-def _get_word_rank(soup: BeautifulSoup) -> str:
+def _get_word_rank(soup: BeautifulSoup) -> Optional[str]:
     """
     Get a rank of word
     :param soup: class BeautifulSoup of page
     :return: rank of word
     """
     try:
-        rank = soup.find(id="word_rank_box").text.strip(" ")
+        return soup.find(id="word_rank_box").text.strip(" ")
     except Exception:
-        rank = None
-    return rank
+        return
 
 
 def _get_word_sounds(soup: BeautifulSoup) -> list[dict]:
@@ -122,46 +132,35 @@ def _get_word_sounds(soup: BeautifulSoup) -> list[dict]:
     :return: list of all the pronunciation sounds of the word
     """
 
-    sounds = []
+    def _get_sound(id: str) -> str:
+        sound = ""
+        if soup.find(id=id):
+            sound = soup.find(id=id).text.split("   ")[:1][0]
+        return sound
 
-    if soup.find(id="us_tr_sound"):
-        us_tr_sound = soup.find(id="us_tr_sound").text.split("   ")[:1][0]
-    else:
-        us_tr_sound = ""
+    def _get_url_sound(id: str) -> str:
+        sound = ""
+        if soup.find(id=id):
+            sound = WOOORDHUNT_URL + soup.find(id=id).find("source")["src"]
+        return sound
 
-    if soup.find(id="uk_tr_sound"):
-        uk_tr_sound = soup.find(id="uk_tr_sound").text.split("   ")[:1][0]
-    else:
-        uk_tr_sound = ""
-
-    if soup.find(id="audio_us"):
-        us_sound = WOOORDHUNT_URL + soup.find(id="audio_us").find("source")["src"]
-    else:
-        us_sound = ""
-
-    if soup.find(id="audio_uk"):
-        uk_sound = WOOORDHUNT_URL + soup.find(id="audio_uk").find("source")["src"]
-    else:
-        uk_sound = ""
-
-    sounds.append(
-        {
+    def _get_sound_info(sound: str, sound_url: str) -> dict[str:str]:
+        return {
             "region": "UK",
-            "transcription": uk_tr_sound,
-            "link": uk_sound,
+            "transcription": sound,
+            "link": sound_url,
             "sound": None,
         }
-    )
 
-    sounds.append(
-        {
-            "region": "US",
-            "transcription": us_tr_sound,
-            "link": us_sound,
-            "sound": None,
-        }
-    )
+    us_tr_sound = _get_sound("us_tr_sound")
+    us_sound = _get_url_sound("audio_us")
 
+    uk_tr_sound = _get_sound("uk_tr_sound")
+    uk_sound = _get_url_sound("audio_uk")
+
+    sounds = list()
+    sounds.append(_get_sound_info(us_tr_sound, us_sound))
+    sounds.append(_get_sound_info(uk_tr_sound, uk_sound))
     return sounds
 
 
@@ -173,15 +172,17 @@ def _get_word_phrases(soup: BeautifulSoup) -> list[dict[str:str]]:
     """
 
     phrases = []
-    all_phrases = soup.find("div", "block phrases")
 
-    if all_phrases:
+    if all_phrases := soup.find("div", "block phrases"):  # Fixme
         for phrase in str(all_phrases.getText).split("</span>"):
             sentense = BeautifulSoup(phrase, "lxml")
             if "—" in sentense.text:
-                translate = sentense.text.split(" — ")[1].strip(" \xa0")
-                sentense = sentense.text.split(" — ")[0].strip()
-                phrases.append({"phrase": sentense, "translate": translate})
+                phrases.append(
+                    {
+                        "phrase": sentense.text.split(" — ")[0].strip(),
+                        "translate": sentense.text.split(" — ")[1].strip(" \xa0"),
+                    }
+                )
     return phrases
 
 
@@ -193,22 +194,16 @@ def _get_word_forms(soup: BeautifulSoup) -> list[dict[str:str]]:
     """
 
     forms = []
-    word_form_block = soup.find_all("div", "word_form_block")
-
-    for form_block in word_form_block:
+    for form_block in soup.find_all("div", "word_form_block"):
         part_of_speech = form_block.find("i").text
-        spans = form_block.find_all("span")
-        for span in spans:
-            condition = span.text
-            value = span.next_sibling.text.strip()
-            if value == "":
-                value = span.next_sibling.next_sibling.text.strip()
+        for span in form_block.find_all("span"):
             forms.append(
                 {
                     "part_of_speech": part_of_speech,
-                    "condition": condition,
-                    "value": value,
+                    "condition": span.text,
+                    "value": span.next_sibling.next_sibling.text.strip()
+                    if not span.next_sibling.text.strip()
+                    else "",
                 }
             )
-
     return forms

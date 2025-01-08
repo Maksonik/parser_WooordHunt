@@ -1,3 +1,4 @@
+# from pprint import pprint
 import httpx
 # import asyncio
 
@@ -5,14 +6,14 @@ from parsers import parser_word
 from validators import get_validated_url
 
 
-def get_word(url_word: str) -> dict[str:str]:
+async def get_word(url_word: str) -> dict[str:str]:
     """
     Get a detailed description of the word
     :param url_word: Url of word or word. Example (www.wooordhunt.ru/word/get or get)
     :return: Dictionary of word meanings
     """
     correct_url = get_validated_url(url_word)
-    page_word = get_page(correct_url)
+    page_word = await get_page(correct_url)
     if page_word:
         word = parser_word(page_word)
         return word
@@ -33,6 +34,5 @@ async def get_page(url: str) -> str:
 
 
 # async def main():
-#     print(await get_page("https://wooordhunt.ru/word/get"))
-#
+#     pprint(await get_word("https://wooordhunt.ru/word/get"))
 # asyncio.run(main())
