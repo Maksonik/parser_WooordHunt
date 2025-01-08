@@ -15,4 +15,4 @@ async def test_get_word(word_mom, word_mom_info):
 @pytest.mark.vcr()
 async def test_get_word_with_wrong_word():
     with pytest.raises(Exception):
-        asd = await get_word("123123")
+        await get_word("123123")

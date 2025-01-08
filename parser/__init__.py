@@ -1,1 +1,0 @@
-from validators import get_validated_url

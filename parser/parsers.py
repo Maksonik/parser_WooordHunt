@@ -52,11 +52,7 @@ def _get_word_descriptions(soup: BeautifulSoup) -> list[dict]:
     """
 
     def _span_has_not_class(tag):
-        return (
-            not tag.has_attr("class")
-            and tag.name == "span"
-            and not tag.text.startswith("+")
-        )
+        return not tag.has_attr("class") and tag.name == "span" and not tag.text.startswith("+")
 
     def _get_description_info(
         part_of_speech: str,
@@ -92,9 +88,7 @@ def _get_word_descriptions(soup: BeautifulSoup) -> list[dict]:
                     _get_description_info(
                         part_of_speech=PART_OF_SPEECH[text.text.strip(" ↓")],
                         general_meaning=general_meaning.text.strip(),
-                        deep_meaning=br.find_previous_sibling(
-                            "i"
-                        ).previous_element.text.strip("\u2002—"),
+                        deep_meaning=br.find_previous_sibling("i").previous_element.text.strip("\u2002—"),
                         translate=br.find_previous_sibling("i").text.strip(),
                     )
                 )
@@ -103,9 +97,7 @@ def _get_word_descriptions(soup: BeautifulSoup) -> list[dict]:
     descriptions = []
     for part_of_speech in soup.find_all("h4"):
         text = "".join(
-            str(child)
-            for child in part_of_speech.find_next("div").contents
-            if isinstance(child, str)
+            str(child) for child in part_of_speech.find_next("div").contents if isinstance(child, str)
         ).replace("-", " ")
 
         descriptions.extend(_get_all_general_meaning(text))
@@ -201,9 +193,7 @@ def _get_word_forms(soup: BeautifulSoup) -> list[dict[str:str]]:
                 {
                     "part_of_speech": part_of_speech,
                     "condition": span.text,
-                    "value": span.next_sibling.next_sibling.text.strip()
-                    if not span.next_sibling.text.strip()
-                    else "",
+                    "value": span.next_sibling.next_sibling.text.strip() if not span.next_sibling.text.strip() else "",
                 }
             )
     return forms
