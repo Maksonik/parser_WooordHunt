@@ -1,6 +1,4 @@
-# from pprint import pprint
 import httpx
-# import asyncio
 
 from parsers import parser_word
 from validators import get_validated_url
@@ -30,7 +28,7 @@ async def get_page(url: str) -> str:
             response = await client.get(url)
         return response.text
     except Exception as e:
-        print("Error, couldn't find the page", e)
+        raise e
 
 
 # async def main():
