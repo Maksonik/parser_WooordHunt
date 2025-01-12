@@ -4,10 +4,8 @@ jobs:
   Coverage:
     runs-on: ubuntu-latest
     steps:
-      - name: check pwd
-        run: pwd
-      - name: check ls
-        run: ls
+      - name: poetry install
+        run: poetry install
       - name: Code Climate Coverage Action
         uses: paambaati/codeclimate-action@v9.0.0
         env:
