@@ -1,1 +1,9 @@
+name: Test coverage
+on: [push]
+jobs:
+  Coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code Climate Coverage Action
+        uses: paambaati/codeclimate-action@v9.0.0
 
