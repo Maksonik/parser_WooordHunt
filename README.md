@@ -1,3 +1,5 @@
+[![Maintainability](https://api.codeclimate.com/v1/badges/3d3393fea44c81694cf8/maintainability)](https://codeclimate.com/github/Maksonik/parser_WooordHunt/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/3d3393fea44c81694cf8/test_coverage)](https://codeclimate.com/github/Maksonik/parser_WooordHunt/test_coverage)
 # Parser WooordHunt
 
 This Python library allows you to fetch detailed descriptions of words from www.wooordhunt.ru.
