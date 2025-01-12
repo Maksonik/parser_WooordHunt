@@ -1,6 +1,6 @@
 import pytest
 
-from parser.validators import get_validated_url
+from wooordhunt_parser import get_validated_url
 
 
 @pytest.mark.usefixtures

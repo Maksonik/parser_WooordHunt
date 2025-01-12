@@ -30,7 +30,3 @@ async def get_page(url: str) -> str:
     except Exception as e:
         raise e
 
-
-# async def main():
-#     pprint(await get_word("https://wooordhunt.ru/word/get"))
-# asyncio.run(main())
