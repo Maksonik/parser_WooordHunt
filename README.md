@@ -9,7 +9,7 @@ This Python library allows you to fetch detailed descriptions of words from www.
 To install the library, use `pip`:
 
 ```bash
-pip install parser_wooordHunt
+pip install wooordhunt_parser
 ```
 
 ## Usage
@@ -20,7 +20,7 @@ This library fetches the detailed description of a word by providing a URL or th
 
 ```python
 import asyncio
-from word import get_word
+from wooordhunt_parser import get_word
 
 # Word URL (e.g., www.wooordhunt.ru/word/get or just 'get')
 WORD = "get"
