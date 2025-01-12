@@ -9,22 +9,11 @@ jobs:
       - name: Set up Python 10
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
-
-      - name: Display Python version
-        run: python -c "import sys; print(sys.version)"
-
-      - name: pwd
-        run: pwd
-
-      - name: ls
-        run: ls
-
-#      - name: Code Climate Coverage Action
-#        uses: paambaati/codeclimate-action@v9.0.0
-#        env:
-#          CC_TEST_REPORTER_ID: ${{ secrets.REPORTER_ID }}
-#        with:
-#          coverageCommand: make test-cov  # make test-cov
-#          debug: true
-
+          python-version: "3.12"
+      - name: Code Climate Coverage Action
+        uses: paambaati/codeclimate-action@v9.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.REPORTER_ID }}
+        with:
+          coverageCommand: make test-cov  # make test-cov
+          debug: true
