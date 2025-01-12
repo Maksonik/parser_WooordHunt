@@ -16,6 +16,9 @@ jobs:
         with:
           poetry-version: "1.8.2"
 
+      - name: Poetry lock
+        run: poetry lock --no-update
+
       - name: Install the project dependencies
         run: poetry install
 
