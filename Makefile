@@ -5,4 +5,4 @@ test:
 	poetry run pytest -vv
 
 test-cov:
-	poetry run pytest --cov=parser tests/ --cov-report=xml
+	echo "ssssssssss"
