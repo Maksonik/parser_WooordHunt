@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from typing import Optional
 
-from constants import PART_OF_SPEECH, WOOORDHUNT_URL
+from .constants import PART_OF_SPEECH, WOOORDHUNT_URL
 
 
 def parser_word(page: str) -> dict[str:str]:

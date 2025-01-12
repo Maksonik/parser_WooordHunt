@@ -1,7 +1,7 @@
 import httpx
 
-from parsers import parser_word
-from validators import get_validated_url
+from .parsers import parser_word
+from .validators import get_validated_url
 
 
 async def get_word(url_word: str) -> dict[str:str]:

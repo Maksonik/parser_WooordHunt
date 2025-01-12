@@ -1,4 +1,4 @@
-from constants import WOOORDHUNT_WORD_URL
+from .constants import WOOORDHUNT_WORD_URL
 
 
 def get_validated_url(word: str) -> str:
