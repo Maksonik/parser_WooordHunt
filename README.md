@@ -1,1 +1,35 @@
-# parser_WooordHunt
+# Parser WooordHunt
+
+This Python library allows you to fetch detailed descriptions of words from www.wooordhunt.ru.
+
+## Installation
+
+To install the library, use `pip`:
+
+```bash
+pip install parser_wooordHunt
+```
+
+## Usage
+
+This library fetches the detailed description of a word by providing a URL or the word itself. 
+
+### Example:
+
+```python
+import asyncio
+from word import get_word
+
+# Word URL (e.g., www.wooordhunt.ru/word/get or just 'get')
+WORD = "get"
+
+async def main():
+    word_description = await get_word(WORD)
+    print(word_description)
+
+asyncio.run(main())
+```
+
+## License
+
+MIT License
