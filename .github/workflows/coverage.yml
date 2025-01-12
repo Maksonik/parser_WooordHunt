@@ -6,7 +6,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python 10
+      - name: Set up Python 12
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
