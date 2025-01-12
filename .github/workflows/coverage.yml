@@ -9,6 +9,6 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.REPORTER_ID }}
         with:
-          coverageCommand: echo `ls` # make test-cov
+          coverageCommand: ls # make test-cov
           debug: true
 
