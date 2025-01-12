@@ -6,4 +6,9 @@ jobs:
     steps:
       - name: Code Climate Coverage Action
         uses: paambaati/codeclimate-action@v9.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.REPORTER_ID }}
+        with:
+          coverageCommand: make test-cov
+          debug: true
 
