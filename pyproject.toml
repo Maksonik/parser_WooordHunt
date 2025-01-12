@@ -1,9 +1,12 @@
 [tool.poetry]
-name = "parser-wooordhunt"
+name = "wooordhunt_parser"
 version = "0.1.0"
 description = ""
 authors = ["Sustavov Maksim <maksim.sustavov@edgecenter.ru>"]
 readme = "README.md"
+
+[project.urls]
+Homepage = "https://github.com/Maksonik/parser_WooordHunt"
 
 [tool.poetry.dependencies]
 python = "^3.12"

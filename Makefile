@@ -5,4 +5,4 @@ test:
 	poetry run pytest -vv
 
 test-cov:
-	poetry run pytest --cov tests/ --cov-report=xml
+	poetry run pytest --cov tests/ --cov-report=xml  --vcr-record=none
