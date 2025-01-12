@@ -10,6 +10,15 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Run image
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: "1.8.2"
+
+      - name: View poetry --help
+        run: poetry --help
+
       - name: Code Climate Coverage Action
         uses: paambaati/codeclimate-action@v9.0.0
         env:
@@ -17,3 +26,4 @@ jobs:
         with:
           coverageCommand: make test-cov  # make test-cov
           debug: true
+
