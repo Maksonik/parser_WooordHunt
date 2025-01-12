@@ -19,6 +19,9 @@ jobs:
       - name: View poetry --help
         run: poetry --help
 
+      - name: Install the project dependencies
+        run: poetry install
+
       - name: Code Climate Coverage Action
         uses: paambaati/codeclimate-action@v9.0.0
         env:
