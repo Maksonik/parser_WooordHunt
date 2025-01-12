@@ -4,11 +4,17 @@ jobs:
   Coverage:
     runs-on: ubuntu-latest
     steps:
+      - name: CD in repo
+        run: cd ${{ github.workspace }}
+      - name: check pwd
+        run: pwd
+      - name: check ls
+        run: ls
       - name: Code Climate Coverage Action
         uses: paambaati/codeclimate-action@v9.0.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.REPORTER_ID }}
         with:
-          coverageCommand: ls # make test-cov
+          coverageCommand: make test-cov  # make test-cov
           debug: true
 
