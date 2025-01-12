@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "wooordhunt_parser"
+name = "wooordhunt-parser"
 version = "0.1.0"
 description = ""
 authors = ["Sustavov Maksim <maksim.sustavov@edgecenter.ru>"]
@@ -14,6 +14,7 @@ beautifulsoup4 = "^4.12.3"
 lxml = "^5.3.0"
 ruff = "^0.8.6"
 httpx = "^0.28.1"
+setuptools = "^75.8.0"
 
 
 [tool.poetry.group.dev.dependencies]
