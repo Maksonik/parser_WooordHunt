@@ -4,13 +4,13 @@ jobs:
   Coverage:
     runs-on: ubuntu-latest
     steps:
-      - name: poetry install
-        run: poetry install
-      - name: Code Climate Coverage Action
-        uses: paambaati/codeclimate-action@v9.0.0
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.REPORTER_ID }}
-        with:
-          coverageCommand: make test-cov  # make test-cov
-          debug: true
+      - uses: actions/checkout@v3
+
+#      - name: Code Climate Coverage Action
+#        uses: paambaati/codeclimate-action@v9.0.0
+#        env:
+#          CC_TEST_REPORTER_ID: ${{ secrets.REPORTER_ID }}
+#        with:
+#          coverageCommand: make test-cov  # make test-cov
+#          debug: true
 
