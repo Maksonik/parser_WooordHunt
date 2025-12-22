@@ -11,4 +11,7 @@ PART_OF_SPEECH = {
     "прочее": "other",
     "предлог": "pretext",
     "междометие": "interjection",
+    "вспомогательный глагол": "auxiliary verb",
+    "артикль": "article",
+    "сокращение": "abbreviation",
 }

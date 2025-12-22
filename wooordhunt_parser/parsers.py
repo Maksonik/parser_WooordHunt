@@ -187,6 +187,8 @@ def _get_word_forms(soup: BeautifulSoup) -> list[dict[str:str]]:
 
     forms = []
     for form_block in soup.find_all("div", "word_form_block"):
+        if not form_block.find("i"):
+            continue
         part_of_speech = form_block.find("i").text
         for span in form_block.find_all("span"):
             forms.append(
