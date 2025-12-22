@@ -136,9 +136,9 @@ def _get_word_sounds(soup: BeautifulSoup) -> list[dict]:
             sound = WOOORDHUNT_URL + soup.find(id=id).find("source")["src"]
         return sound
 
-    def _get_sound_info(sound: str, sound_url: str) -> dict[str:str]:
+    def _get_sound_info(region: str, sound: str, sound_url: str) -> dict[str:str]:
         return {
-            "region": "UK",
+            "region": region,
             "transcription": sound,
             "link": sound_url,
             "sound": None,
@@ -151,8 +151,8 @@ def _get_word_sounds(soup: BeautifulSoup) -> list[dict]:
     uk_sound = _get_url_sound("audio_uk")
 
     sounds = list()
-    sounds.append(_get_sound_info(us_tr_sound, us_sound))
-    sounds.append(_get_sound_info(uk_tr_sound, uk_sound))
+    sounds.append(_get_sound_info("US", us_tr_sound, us_sound))
+    sounds.append(_get_sound_info("UK", uk_tr_sound, uk_sound))
     return sounds
 
 
