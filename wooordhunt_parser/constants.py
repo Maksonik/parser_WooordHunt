@@ -14,4 +14,5 @@ PART_OF_SPEECH = {
     "вспомогательный глагол": "auxiliary verb",
     "артикль": "article",
     "сокращение": "abbreviation",
+    "неправильный глагол": "irregular_verb",
 }

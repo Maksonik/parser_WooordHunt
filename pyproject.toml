@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "wooordhunt-parser"
-version = "0.4.2"
+version = "0.4.4"
 description = ""
 authors = ["Sustavov Maksim <maksim.sustavov@edgecenter.ru>"]
 readme = "README.md"
